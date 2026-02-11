@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data:; connect-src 'self';">
+    <meta name="description"
+        content="LUART Systems - Servicios profesionales de impresión 3D y diseño en España. Prototipado rápido, materiales técnicos y arte digital.">
+    <title>LUART | Antigravity Design</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Outfit:wght@200;300;400;600&display=swap"
+        rel="stylesheet">
+    <!-- Three.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+    <script src="gallery-data.js" defer></script>
+    <script src="main.js" defer></script>
+    <link rel="stylesheet" href="style.css">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="void-body">
+    <!-- Ambient Effects -->
+    <div class="noise-overlay"></div>
+    <div class="cursor-glow"></div>
+    <div class="nebula-spot spot-1"></div>
+    <div class="nebula-spot spot-2"></div>
+
+    <nav class="glass-nav">
+        <div class="logo">LUART<span class="dot">.</span></div>
+        <ul class="nav-links">
+            <li><a href="#home">Inicio</a></li>
+            <li><a href="#gallery">Portafolio</a></li>
+            <li><a href="#services">Servicios</a></li>
+            <li><a href="#contact">Contacto</a></li>
+        </ul>
+        <div class="mobile-menu-btn"><i class="fas fa-bars"></i></div>
+    </nav>
+
+    <section id="home" class="hero-section void-hero">
+        <div class="hero-content">
+            <div class="hero-badge">TUS IDEAS EN VOLUMEN REAL</div>
+            <h1 class="void-title-hero" data-text="IMPRESIÓN 3D">IMPRESIÓN<br>3D</h1>
+            <p class="void-subtitle">Del archivo digital a tus manos. Creamos soluciones a medida, regalos que dejan con
+                la boca abierta y prototipos que funcionan de verdad.</p>
+            <div class="cta-group">
+                <a href="#gallery" class="btn primary glow-effect">
+                    <span class="btn-text">VER PROYECTOS</span>
+                    <div class="btn-glitch"></div>
+                </a>
+                <a href="#contact" class="btn secondary">
+                    COTIZAR
+                </a>
+            </div>
+        </div>
+        <div class="hero-visual" id="canvas-container">
+            <!-- Three.js Canvas -->
+        </div>
+    </section>
+
+    <section id="gallery" class="gallery-section void-section">
+        <h2 class="section-title">PORTAFOLIO <span class="accent-line"></span></h2>
+
+        <!-- Main Categories -->
+        <div class="filter-main">
+            <button class="filter-btn active" data-filter="all">TODO</button>
+            <button class="filter-btn" data-filter="own">DISEÑOS LUART</button>
+            <button class="filter-btn" data-filter="others">DISEÑOS DE TERCEROS</button>
+        </div>
+
+        <!-- Subcategories -->
+        <div class="filter-sub">
+            <button class="filter-pill active" data-subfilter="all">TODO</button>
+            <button class="filter-pill" data-subfilter="artistic">ARTÍSTICO</button>
+            <button class="filter-pill" data-subfilter="technical">TÉCNICO</button>
+        </div>
+        </div>
+
+        <div class="gallery-grid" id="gallery-grid">
+            <!-- Injected by JS -->
+        </div>
+    </section>
+
+    <section id="services" class="services-section">
+        <!-- Video Background Preserved -->
+        <div class="video-bg-container">
+            <video autoplay loop muted playsinline class="video-bg">
+                <source src="media/videos/Scene_the_transformation_1080p_202602021.mp4" type="video/mp4">
+            </video>
+            <div class="video-overlay-gradient"></div>
+        </div>
+
+        <div class="services-content-wrapper">
+            <h2 class="section-title">SERVICIOS</h2>
+            <div class="services-grid">
+                <div class="service-card glass-panel">
+                    <i class="fas fa-cubes service-icon"></i>
+                    <h3>MODELADO 3D</h3>
+                    <p>Si lo puedes imaginar, lo podemos modelar. Diseño orgánico y paramétrico listo para imprimir sin
+                        fallos.</p>
+                </div>
+                <div class="service-card glass-panel">
+                    <i class="fas fa-print service-icon"></i>
+                    <h3>FABRICACIÓN FDM</h3>
+                    <p>Impresión con materiales duros (PLA, PETG) y acabados finos. Nada de capas mal pegadas.</p>
+                    <ul class="tech-specs">
+                        <li>Precisión: 0.1mm</li>
+                        <li>Soportes: Limpios</li>
+                        <li>Acabado: De lujo</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact-section void-section">
+        <div class="contact-container glass-panel">
+            <h2>INICIAR ENLACE</h2>
+            <form id="contactForm">
+                <div class="input-group">
+                    <input type="text" required>
+                    <label>¿CÓMO TE LLAMAS?</label>
+                </div>
+                <div class="input-group">
+                    <input type="email" required>
+                    <label>TU EMAIL</label>
+                </div>
+                <div class="input-group">
+                    <textarea required></textarea>
+                    <label>CUÉNTAME TU IDEA</label>
+                </div>
+                <button type="submit" class="btn primary full-width glow-effect">
+                    <span class="btn-text">ENVIAR MENSAJE</span>
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 LUART SYSTEMS. ESTADO: ONLINE.</p>
+            <div class="socials">
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-artstation"></i></a>
+                <a href="#"><i class="fas fa-envelope"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Project Detail Modal (Legacy/Quick View) -->
+    <div id="project-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-body">
+                <div class="modal-gallery">
+                    <img id="modal-main-img" src="" alt="">
+                    <div class="modal-thumbnails" id="modal-thumbnails"></div>
+                </div>
+                <div class="modal-info">
+                    <span id="modal-category" class="modal-badge-cat">Categoría</span>
+                    <h2 id="modal-title">Título</h2>
+                    <p id="modal-author" class="modal-text-muted">Diseño por: Autor</p>
+                    <p id="modal-desc">Descripción...</p>
+                    <div class="modal-footer">
+                        <span id="modal-price" class="price-tag">0.00 €</span>
+                        <a href="product.html" id="modal-details-link" class="btn primary small">VER ARTEFACTO
+                            COMPLETO</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+
+</html>

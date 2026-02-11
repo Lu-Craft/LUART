@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUART | 3D Design & Printing</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Outfit:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <!-- Three.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="noise-overlay"></div>
+    <div class="cursor-glow"></div>
+
+    <nav class="glass-nav">
+        <div class="logo">LUART<span class="dot">.</span></div>
+        <ul class="nav-links">
+            <li><a href="#home">Inicio</a></li>
+            <li><a href="#gallery">Portafolio</a></li>
+            <li><a href="#services">Servicios</a></li>
+            <li><a href="#contact">Contacto</a></li>
+        </ul>
+        <div class="mobile-menu-btn"><i class="fas fa-bars"></i></div>
+    </nav>
+
+    <section id="home" class="hero-section">
+        <div class="hero-content">
+            <h1 class="glitch" data-text="IMPRESIÓN 3D">IMPRESIÓN 3D</h1>
+            <h2 class="subtitle">DISEÑO & MATERIALIZACIÓN</h2>
+            <p>Transformamos ideas digitales en realidades tangibles con precisión milimétrica y estética futurista.</p>
+            <div class="cta-group">
+                <a href="#gallery" class="btn primary">Ver Proyectos <i class="fas fa-arrow-right"></i></a>
+                <a href="#contact" class="btn secondary">Cotizar</a>
+            </div>
+        </div>
+        <div class="hero-visual" id="canvas-container">
+            <!-- Three.js Canvas will be injected here by main.js -->
+        </div>
+    </section>
+
+    <section id="gallery" class="gallery-section">
+        <h2 class="section-title">PORTAFOLIO <span class="accent-line"></span></h2>
+
+        <!-- Main Categories -->
+        <div class="filter-main">
+            <button class="filter-btn active" data-filter="all">Ver Todo</button>
+            <button class="filter-btn" data-filter="own">Diseños Propios</button>
+            <button class="filter-btn" data-filter="others">Diseños de Otros Autores</button>
+        </div>
+
+        <!-- Subcategories (Hidden by default or shown based on selection) -->
+        <div class="filter-sub">
+            <!-- Populated dynamically via JS or static if simple -->
+            <button class="filter-pill active" data-subfilter="all">Todo</button>
+            <button class="filter-pill" data-subfilter="artistic">Artísticos</button>
+            <button class="filter-pill" data-subfilter="technical">Técnicos</button>
+            <button class="filter-pill" data-subfilter="toys">Juguetes</button>
+        </div>
+
+        <div class="gallery-grid" id="gallery-grid">
+            <!-- Injected by JS -->
+        </div>
+    </section>
+
+    <section id="services" class="services-section">
+        <!-- Video Background -->
+        <div class="video-bg-container">
+            <video autoplay loop muted playsinline class="video-bg">
+                <source src="media/videos/Scene_the_transformation_1080p_202602021.mp4" type="video/mp4">
+            </video>
+            <div class="video-overlay"></div>
+        </div>
+
+        <h2 class="section-title">SERVICIOS</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <i class="fas fa-cubes"></i>
+                <h3>Modelado 3D</h3>
+                <p>Diseño parametricos y orgánicos optimizados para manufactura aditiva.</p>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-print service-icon"></i>
+                <h3>Impresión FDM</h3>
+                <p>Fabricación en PLA y PETG.</p>
+                <ul class="tech-specs">
+                    <li>Alta precisión</li>
+                    <li>Limpieza de soportes incluida</li>
+                    <li>Acabado limpio</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact-section">
+        <div class="contact-container glass-panel">
+            <h2>INICIAR PROYECTO</h2>
+            <form id="contactForm">
+                <div class="input-group">
+                    <input type="text" required>
+                    <label>Nombre</label>
+                </div>
+                <div class="input-group">
+                    <input type="email" required>
+                    <label>Email</label>
+                </div>
+                <div class="input-group">
+                    <textarea required></textarea>
+                    <label>Mensaje / Idea</label>
+                </div>
+                <button type="submit" class="btn primary full-width">ENVIAR MENSAJE</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 LUART. All Systems Online.</p>
+            <div class="socials">
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-artstation"></i></a>
+                <a href="#"><i class="envelope"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Project Detail Modal -->
+    <div id="project-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-body">
+                <div class="modal-gallery">
+                    <img id="modal-main-img" src="" alt="">
+                    <div class="modal-thumbnails" id="modal-thumbnails">
+                        <!-- Thumbs appended here -->
+                    </div>
+                </div>
+                <div class="modal-info">
+                    <span id="modal-category" class="modal-badge-cat">Categoría</span>
+                    <h2 id="modal-title">Título del Proyecto</h2>
+                    <p id="modal-author" class="modal-text-muted">Diseño por: Autor</p>
+                    <p id="modal-desc">Descripción detallada...</p>
+                    <div class="modal-footer">
+                        <span id="modal-price" class="price-tag">0.00 €</span>
+                        <a href="#contact" class="btn primary small">Interesado</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="gallery-data.js"></script>
+    <script src="main.js"></script>
+</body>
+
+</html>

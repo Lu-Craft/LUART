@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Detalle del artefacto - LUART Systems. Diseño 3D e impresión de alta calidad.">
+    <title>Artefacto | LUART</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Outfit:wght@200;300;400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+</head>
+
+<body class="void-body">
+    <!-- Ambient Effects -->
+    <div class="noise-overlay"></div>
+    <div class="cursor-glow"></div>
+    <div class="nebula-spot spot-1"></div>
+    <div class="nebula-spot spot-2"></div>
+
+    <nav class="glass-nav">
+        <div class="logo">LUART<span class="dot">.</span></div>
+        <ul class="nav-links">
+            <li><a href="index.html" class="nav-back"><i class="fas fa-chevron-left"></i> Volver al Portafolio</a></li>
+        </ul>
+    </nav>
+
+    <main class="void-container">
+        <!-- Visual Sector -->
+        <div class="visual-sector">
+            <!-- Swiper Container -->
+            <div class="swiper mySwiper">
+                <div class="swiper-wrapper" id="swiper-wrapper">
+                    <!-- Slides injected by JS -->
+                </div>
+                <!-- Controls -->
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-pagination"></div>
+            </div>
+
+            <div class="holo-ring"></div>
+            <div class="reflection-floor"></div>
+
+            <div id="thumb-grid" class="void-thumbnails">
+                <!-- Thumbs (optional sync) -->
+            </div>
+        </div>
+
+        <!-- Data Sector -->
+        <div class="data-sector">
+            <div class="data-header">
+                <span id="prod-author" class="void-tag">DESCONOCIDO</span>
+                <h1 id="prod-title" class="void-title">AFINANDO LOS LÁSERES...</h1>
+            </div>
+
+            <div class="separation-line"></div>
+
+            <p id="prod-desc" class="void-description">
+                Materializando la información...
+            </p>
+
+            <div class="void-specs">
+                <div class="spec-item">
+                    <span class="label">ESTADO</span>
+                    <span class="value">DISPONIBLE</span>
+                </div>
+
+            </div>
+
+            <div class="action-module">
+                <div id="prod-price" class="void-price">--</div>
+                <a href="index.html#contact" class="btn primary glow-effect">
+                    <span class="btn-text">LO QUIERO YA</span>
+                    <div class="btn-glitch"></div>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script src="gallery-data.js" defer></script>
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <script>
+        // Void Cursor Logic (Simple Follower)
+        document.addEventListener('mousemove', (e) => {
+            const cursor = document.querySelector('.cursor-glow');
+            if (cursor) {
+                requestAnimationFrame(() => {
+                    cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+                });
+            }
+        });
+
+        // Main initialization logic
+        function initProductPage() {
+            const params = new URLSearchParams(window.location.search);
+            const productId = params.get('id');
+            const product = galleryData.find(p => p.id === productId);
+
+            if (!product) {
+                document.querySelector('.void-container').innerHTML = '<div class="error-msg"><h1>ANOMALÍA DETECTADA</h1><p>Objeto no encontrado en el sector.</p><a href="index.html" class="btn primary">Abortar</a></div>';
+                return;
+            }
+
+            // Inject Text Data
+            document.title = `${product.title} | LUART ARTEFACT`;
+            document.getElementById('prod-title').innerText = product.title;
+            if (document.getElementById('prod-author')) {
+                document.getElementById('prod-author').innerText = product.author ? product.author : 'DESIGN_LAB';
+            }
+            document.getElementById('prod-desc').innerText = product.description;
+            document.getElementById('prod-price').innerText = product.price;
+
+            // --- SWIPER INITIALIZATION ---
+            const swiperWrapper = document.getElementById('swiper-wrapper');
+            const thumbGrid = document.getElementById('thumb-grid');
+
+            if (product.images.length > 0) {
+                product.images.forEach((img, index) => {
+                    // Create Slide
+                    const slide = document.createElement('div');
+                    slide.className = 'swiper-slide';
+                    // Use lazy loading attribute and display block to ensure visibility
+                    slide.innerHTML = `<img src="${img}" alt="${product.title} view ${index + 1}" loading="eager" style="display:block;" />`;
+                    swiperWrapper.appendChild(slide);
+
+                    // Create Thumb
+                    const thumb = document.createElement('div');
+                    thumb.className = 'void-thumb';
+                    thumb.innerHTML = `<img src="${img}" alt="Thumb ${index + 1}" />`;
+                    thumb.addEventListener('click', () => {
+                        const swiperInstance = document.querySelector('.mySwiper').swiper;
+                        if (swiperInstance) swiperInstance.slideTo(index);
+                    });
+                    thumbGrid.appendChild(thumb);
+                });
+
+                // Initialize Swiper
+                const swiper = new Swiper(".mySwiper", {
+                    effect: "fade",
+                    fadeEffect: {
+                        crossFade: false
+                    },
+                    grabCursor: true,
+                    autoHeight: false, // Changed to false to prevent layout collapse
+                    observer: true, // IMPORTANT: Updates on DOM changes
+                    observeParents: true,
+                    navigation: {
+                        nextEl: ".swiper-button-next",
+                        prevEl: ".swiper-button-prev",
+                    },
+                    pagination: {
+                        el: ".swiper-pagination",
+                        clickable: true,
+                    },
+                    on: {
+                        slideChange: function () {
+                            document.querySelectorAll('.void-thumb').forEach((t, i) => {
+                                t.classList.toggle('active', i === this.activeIndex);
+                            });
+                        },
+                        init: function () {
+                            // Force update after short delay to fix rendering glitches
+                            setTimeout(() => {
+                                this.update();
+                            }, 100);
+                        }
+                    }
+                });
+
+                // Initial thumb active state
+                const firstThumb = document.querySelector('.void-thumb');
+                if (firstThumb) firstThumb.classList.add('active');
+
+            } else {
+                swiperWrapper.innerHTML = '<div class="swiper-slide"><p>No visual data.</p></div>';
+            }
+        }
+
+        // Wait for DOM content
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check if galleryData is loaded
+            if (typeof galleryData !== 'undefined') {
+                initProductPage();
+            } else {
+                // Wait a bit if not ready (fallback)
+                window.onload = initProductPage;
+            }
+        });
+    </script>
+</body>
+
+</html>

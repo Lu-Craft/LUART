@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle de Proyecto | LUART</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Outfit:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="noise-overlay"></div>
+    <div class="cursor-glow"></div>
+
+    <nav class="glass-nav">
+        <div class="logo">LUART<span class="dot">.</span></div>
+        <ul class="nav-links">
+            <li><a href="index.html">Volver al Portafolio</a></li>
+        </ul>
+    </nav>
+
+    <div class="product-container">
+        <div class="product-gallery">
+            <img id="main-img" class="main-image" src="" alt="Imagen Principal">
+            <div id="thumb-grid" class="thumbnails">
+                <!-- Thumbs injected here -->
+            </div>
+        </div>
+
+        <div class="product-info">
+            <a href="index.html#gallery" class="back-link"><i class="fas fa-arrow-left"></i> Volver a la galería</a>
+
+            <h1 id="prod-title">Cargando...</h1>
+            <span id="prod-author" class="author-tag">...</span>
+
+            <p id="prod-desc" class="description">...</p>
+
+            <div class="price-block">
+                <span id="prod-price" class="price">...</span>
+                <a href="index.html#contact" class="btn primary full-width">Solicitar Presupuesto</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="gallery-data.js"></script>
+    <script>
+        // Mouse follower effect (consistent with main site)
+        document.addEventListener('mousemove', (e) => {
+            const cursor = document.querySelector('.cursor-glow');
+            if (cursor) {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+                cursor.style.background = `radial-gradient(circle, rgba(255, 102, 0, 0.15) 0%, transparent 70%)`;
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get ID from URL
+            const params = new URLSearchParams(window.location.search);
+            const productId = params.get('id');
+            const product = galleryData.find(p => p.id === productId);
+
+            if (!product) {
+                document.querySelector('.product-container').innerHTML = '<h2>Producto no encontrado</h2><a href="index.html" class="btn primary">Volver</a>';
+                return;
+            }
+
+            // Populate Data
+            document.title = `${product.title} | LUART`;
+            document.getElementById('prod-title').innerText = product.title;
+            document.getElementById('prod-author').innerText = product.author ? `Diseño por: ${product.author}` : 'Diseño Propio';
+            document.getElementById('prod-desc').innerText = product.description;
+            document.getElementById('prod-price').innerText = product.price;
+
+            // Gallery Logic
+            const mainImg = document.getElementById('main-img');
+            const thumbGrid = document.getElementById('thumb-grid');
+
+            if (product.images.length > 0) {
+                // Set Main Image (First one)
+                mainImg.src = product.images[0];
+
+                // Generate Thumbs
+                product.images.forEach((img, index) => {
+                    const thumb = document.createElement('img');
+                    thumb.src = img;
+                    thumb.classList.add('thumb');
+                    if (index === 0) thumb.classList.add('active');
+
+                    thumb.addEventListener('click', () => {
+                        mainImg.src = img;
+                        document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+                        thumb.classList.add('active');
+                    });
+
+                    thumbGrid.appendChild(thumb);
+                });
+            } else {
+                mainImg.alt = "No images available";
+            }
+        });
+    </script>
+</body>
+
+</html>
