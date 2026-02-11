@@ -389,6 +389,20 @@ body {
     border: 1px solid var(--glass-border);
     backdrop-filter: blur(20px);
     border-radius: 20px;
+    /* User Requested Enhancement: Glow Animation */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); 
+    animation: contactGlow 4s infinite alternate;
+}
+
+@keyframes contactGlow {
+    from {
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8), 0 0 0 transparent;
+        border-color: var(--glass-border);
+    }
+    to {
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9), 0 0 20px rgba(255, 102, 0, 0.2);
+        border-color: var(--primary);
+    }
 }
 
 .contact-container h2 {
