@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data:; connect-src 'self';">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data:; connect-src 'self' https://kvtietlcmyubphenthfo.supabase.co wss://kvtietlcmyubphenthfo.supabase.co;">
     <meta name="description"
         content="LUART Systems - Servicios profesionales de impresión 3D y diseño en España. Prototipado rápido, materiales técnicos y arte digital.">
     <title>LUART | Antigravity Design</title>
@@ -15,6 +16,9 @@
         rel="stylesheet">
     <!-- Three.js Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+    <!-- Supabase UMD Global Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabaseClient.js" defer></script>
     <script src="gallery-data.js" defer></script>
     <script src="main.js" defer></script>
     <link rel="stylesheet" href="style.css">
