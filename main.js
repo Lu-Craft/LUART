@@ -369,19 +369,29 @@
     const initForms = () => {
         if (!DOM.contactForm) return;
 
-        DOM.contactForm.addEventListener('submit', (e) => {
+        DOM.contactForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = DOM.contactForm.querySelector('button');
             const btnText = btn.querySelector('.btn-text');
 
+            const inputs = DOM.contactForm.querySelectorAll('input, textarea');
+            const clientName = inputs[0].value;
+            const clientEmail = inputs[1].value;
+            const message = inputs[2].value;
+
             btn.disabled = true;
-            btnText.textContent = 'ENVIANDO A LA RED SEURA...';
+            btnText.textContent = 'ENLACE EN PROCESO...';
             btn.style.opacity = '0.7';
             btn.style.cursor = 'wait';
 
-            setTimeout(() => {
-                // Secure HTML update - using innerHTML here locally is acceptable for static trusted string, 
-                // but let's be 100% clean and use DOM methods.
+            try {
+                // Using the global client from supabaseClient.js
+                const { error } = await window.supabaseClient
+                    .from('public_contacts')
+                    .insert([{ client_name: clientName, client_email: clientEmail, message }]);
+
+                if (error) throw error;
+
                 DOM.contactForm.innerHTML = ''; // Clear
 
                 const wrapper = document.createElement('div');
@@ -397,14 +407,24 @@
 
                 const msg = document.createElement('p');
                 msg.style.cssText = 'color: var(--text-muted);';
-                msg.textContent = 'Tu mensaje ha sido trasmitido. Nuestros sistemas procesarán la solicitud en breve.'; // Fixed typo from 'trasmitido' if needed, but keeping original text
+                msg.textContent = 'Tu mensaje ha sido cifrado y transmitido. Recibirás respuesta pronto.';
 
                 wrapper.appendChild(icon);
                 wrapper.appendChild(title);
                 wrapper.appendChild(msg);
 
                 DOM.contactForm.appendChild(wrapper);
-            }, 2000);
+
+            } catch (error) {
+                console.error('Submission Error:', error);
+                btnText.textContent = 'ERROR DE ENLACE';
+                btn.style.opacity = '1';
+                setTimeout(() => {
+                    btnText.textContent = 'REINTENTAR MENSAJE';
+                    btn.disabled = false;
+                    btn.style.cursor = 'pointer';
+                }, 3000);
+            }
         });
     };
 
