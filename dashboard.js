@@ -114,28 +114,38 @@
                 if (error) throw error;
 
                 if (!data || data.length === 0) {
-                    quotesList.innerHTML = '<p style="color: var(--text-muted); text-align:center; padding: 2rem;">No hay operaciones registradas en el núcleo.</p>';
+                    quotesList.innerHTML = `
+                        <div class="glass-card rounded-2xl p-6 flex flex-col items-center justify-center text-gray-500 h-64 border-dashed border-white/5">
+                            <i class="fas fa-box-open text-3xl mb-4 text-gray-600"></i>
+                            <p class="text-sm font-medium">No hay operaciones registradas en el núcleo.</p>
+                        </div>
+                    `;
                     return;
                 }
 
                 quotesList.innerHTML = '';
                 data.forEach(quote => {
                     const card = document.createElement('div');
-                    card.className = 'quote-card';
+                    card.className = 'glass-card rounded-2xl p-6 relative overflow-hidden group hover:-translate-y-1 transition-transform cursor-default';
 
                     const dateObj = new Date(quote.created_at);
                     const formattedDate = dateObj.toLocaleDateString() + ' ' + dateObj.toLocaleTimeString();
 
                     card.innerHTML = `
-                        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                        <div class="absolute -right-4 -top-4 w-24 h-24 bg-white/5 rounded-full blur-xl group-hover:bg-luart-500/10 transition-colors"></div>
+                        <div class="flex justify-between items-start relative z-10">
                             <div>
-                                <h4 style="font-family: var(--font-heading); color: var(--text-light); font-size:1.1rem; margin-bottom: 0.2rem;">${quote.project_title}</h4>
-                                <p style="font-size: 0.8rem; color: var(--text-muted);">${formattedDate}</p>
+                                <h4 class="font-display text-white text-lg font-bold tracking-tight mb-1">${quote.project_title}</h4>
+                                <p class="text-xs text-gray-500 font-mono">${formattedDate}</p>
                             </div>
-                            <span class="status-badge">${quote.status.toUpperCase().replace('_', ' ')}</span>
+                            <span class="text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full border border-luart-500/30 text-luart-500 bg-luart-500/10">
+                                ${quote.status.replace('_', ' ')}
+                            </span>
                         </div>
-                        <p style="margin-top: 1rem; color: var(--text-muted); font-size: 0.9rem;"><strong>Material:</strong> ${quote.preferred_material}</p>
-                        ${quote.quoted_price ? `<p style="margin-top: 0.5rem; color: var(--primary); font-family: var(--font-heading);"><strong>PRECIO FIJADO: ${quote.quoted_price}€</strong></p>` : ''}
+                        <div class="mt-4 relative z-10 space-y-2">
+                            <p class="text-sm text-gray-400"><span class="text-gray-500">Material:</span> <span class="text-gray-300 font-medium">${quote.preferred_material}</span></p>
+                            ${quote.quoted_price ? `<p class="text-sm text-green-400 font-mono font-bold mt-2 pt-2 border-t border-white/10">FACTURACIÓN: €${quote.quoted_price}</p>` : ''}
+                        </div>
                     `;
                     quotesList.appendChild(card);
                 });

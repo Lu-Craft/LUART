@@ -4,130 +4,243 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LUART | Dashboard Cliente</title>
-
-    <!-- Supabase UMD Global Client -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="supabaseClient.js?v=8" defer></script>
-    <script src="dashboard.js?v=8" defer></script>
-    <link rel="stylesheet" href="style.css?v=8">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>LUART | Client Portal</title>
+    <!-- Fonts -->
     <link
-        href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
-    <style>
-        .dashboard-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 8rem 2rem 2rem 2rem;
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 2rem;
-        }
-
-        @media (max-width: 768px) {
-            .dashboard-container {
-                grid-template-columns: 1fr;
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        luart: { 50: '#fff5ed', 100: '#ffe8d4', 500: '#ff6600', 600: '#e65c00', 900: '#7a3100' },
+                        dark: { 800: '#0f0f11', 900: '#0a0a0b', 950: '#050505' }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    }
+                }
             }
         }
+    </script>
+    <style>
+        body {
+            background-color: #050505;
+            color: #e2e8f0;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
 
-        .quote-card {
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0a0a0b;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ff6600;
+        }
+
+        .glass-card {
             background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-            border-radius: 8px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
         }
 
-        .quote-card:hover {
-            border-color: var(--primary);
-            box-shadow: 0 0 15px rgba(255, 102, 0, 0.1);
+        .text-gradient {
+            background: linear-gradient(to right, #ffffff, #ff6600);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .status-badge {
-            display: inline-block;
-            padding: 0.2rem 0.8rem;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            font-family: var(--font-heading);
-            font-weight: 700;
-            background: rgba(255, 102, 0, 0.2);
-            color: var(--primary);
-            margin-top: 0.5rem;
+        .input-field {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .input-field:focus {
+            border-color: #ff6600;
+            background: rgba(255, 102, 0, 0.05);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(255, 102, 0, 0.1);
+        }
+
+        .nav-links li a {
+            position: relative;
+        }
+
+        .nav-links li a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background: #ff6600;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links li a:hover::after {
+            width: 100%;
+        }
+
+        .file-upload-block {
+            border: 2px dashed rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .file-upload-block:hover {
+            border-color: #ff6600;
+            background: rgba(255, 102, 0, 0.02);
         }
     </style>
 </head>
 
-<body class="dark-mode">
-    <div class="noise-overlay"></div>
-    <div class="cursor-glow"></div>
+<body
+    class="min-h-screen bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-dark-800 via-dark-950 to-black relative">
 
-    <nav class="glass-nav">
-        <div class="logo"><a href="index.html" style="color:var(--text-light);text-decoration:none;">LUART<span
-                    class="dot">.</span></a></div>
-        <ul class="nav-links">
-            <li><a href="#" id="user-display"><i class="fas fa-user"></i> CARGANDO...</a></li>
-            <li><a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> DESCONECTAR</a></li>
+    <!-- Top Navigation -->
+    <nav
+        class="fixed top-0 w-full z-50 glass-card border-b-0 border-white/5 h-20 px-8 flex items-center justify-between">
+        <div class="logo">
+            <a href="index.html"
+                class="text-2xl font-display font-bold text-white tracking-widest inline-block transition-transform hover:scale-105">
+                LUART<span class="text-luart-500">.</span>
+            </a>
+        </div>
+        <ul class="nav-links flex items-center gap-8">
+            <li class="hidden md:block">
+                <a href="#" id="user-display"
+                    class="flex items-center gap-2 text-sm text-gray-300 hover:text-white transition-colors">
+                    <i class="fas fa-circle-notch fa-spin text-luart-500"></i> Cargando...
+                </a>
+            </li>
+            <li class="pl-4 border-l border-white/10">
+                <a href="#" id="logout-btn"
+                    class="flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors group">
+                    <span class="md:hidden">Salir</span>
+                    <span class="hidden md:inline">Desconectar</span>
+                    <i class="fas fa-sign-out-alt group-hover:translate-x-1 transition-transform"></i>
+                </a>
+            </li>
         </ul>
     </nav>
 
-    <main class="dashboard-container">
-        <!-- Columna Izquierda: Formulario Nueva Cotización -->
-        <div class="glass-panel">
-            <h3 style="font-family: var(--font-heading); margin-bottom: 1.5rem;">NUEVA SOLICITUD 3D</h3>
-            <form id="new-quote-form">
-                <div class="input-group">
-                    <input type="text" id="qt-title" required>
-                    <label>TÍTULO DEL PROYECTO</label>
-                </div>
-                <div class="input-group">
-                    <input type="text" id="qt-material" placeholder="FDM, Resina, Flexible..." required>
-                    <label>MATERIAL PREFERIDO</label>
-                </div>
-                <div class="input-group">
-                    <textarea id="qt-desc" required></textarea>
-                    <label>DESCRIPCIÓN TÉCNICA</label>
+    <!-- Main Content Grid -->
+    <main class="pt-32 pb-16 px-6 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+        <!-- Left Column: New Request -->
+        <div class="lg:col-span-5 h-fit">
+            <h2 class="text-3xl font-display font-bold text-white tracking-tight mb-2">New 3D Request</h2>
+            <p class="text-gray-400 text-sm mb-8">Ingresa los detalles de tu modelo 3D para fabricación. Sube tu archivo
+                y genera una orden de producción rastreable al instante.</p>
+
+            <div class="glass-card rounded-2xl p-8 relative overflow-hidden group">
+                <div
+                    class="absolute -right-4 -top-4 w-32 h-32 bg-luart-500/10 rounded-full blur-2xl group-hover:bg-luart-500/20 transition-all">
                 </div>
 
-                <div class="file-upload-group" style="margin-bottom:1.5rem;">
-                    <label for="qt-file" class="file-label" style="text-align:center; padding: 2rem;">
-                        <i class="fas fa-cube" style="font-size:2rem; margin-bottom:1rem; display:block;"></i>
-                        CARGAR MODELO 3D (.STL, .OBJ)
-                    </label>
-                    <input type="file" id="qt-file" accept=".stl,.obj" class="file-input" required>
-                    <div id="file-name-display"
-                        style="text-align:center; color: var(--primary); font-size: 0.9rem; margin-top:0.5rem;"></div>
-                </div>
+                <form id="new-quote-form" class="space-y-5 relative z-10">
+                    <div class="space-y-2">
+                        <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Título del
+                            Proyecto</label>
+                        <input type="text" id="qt-title" required
+                            class="input-field w-full rounded-lg py-3 px-4 text-sm" placeholder="Ej: Carcasa Drone v2">
+                    </div>
 
-                <div id="quote-error"
-                    style="color: #ff3333; margin-bottom: 1rem; font-size: 0.9rem; text-align: center;"></div>
+                    <div class="space-y-2">
+                        <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Material y
+                            Especificaciones</label>
+                        <input type="text" id="qt-material" required
+                            class="input-field w-full rounded-lg py-3 px-4 text-sm"
+                            placeholder="FDM PLA / Resina ABS...">
+                    </div>
 
-                <button type="submit" class="btn primary full-width glow-effect">
-                    <span class="btn-text" id="qt-btn-text">INICIAR MANUFACTURA</span>
-                </button>
-            </form>
-        </div>
+                    <div class="space-y-2">
+                        <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Instrucciones
+                            Técnicas</label>
+                        <textarea id="qt-desc" required rows="3"
+                            class="input-field w-full rounded-lg py-3 px-4 text-sm resize-none"
+                            placeholder="Relleno al 20%, soportes gruesos..."></textarea>
+                    </div>
 
-        <!-- Columna Derecha: Listado de Cotizaciones -->
-        <div class="glass-panel">
-            <h3 style="font-family: var(--font-heading); margin-bottom: 1.5rem;">REGISTRO DE OPERACIONES</h3>
-            <div id="my-quotes-list">
-                <p style="color: var(--text-muted); text-align:center; padding: 2rem;">Cargando historial de modelos...
-                </p>
+                    <div class="space-y-2 pt-2">
+                        <label for="qt-file"
+                            class="file-upload-block w-full rounded-xl cursor-pointer flex flex-col items-center justify-center py-10 px-4 group/upload">
+                            <div
+                                class="w-14 h-14 rounded-full bg-white/5 flex items-center justify-center mb-3 group-hover/upload:bg-luart-500/20 group-hover/upload:text-luart-500 transition-colors text-white">
+                                <i class="fas fa-cloud-upload-alt text-xl"></i>
+                            </div>
+                            <span class="text-sm font-medium text-white mb-1">Cargar Archivo 3D</span>
+                            <span class="text-xs text-gray-500">Formatos: .STL o .OBJ (Máx 50MB)</span>
+                            <input type="file" id="qt-file" accept=".stl,.obj" class="hidden" required>
+                        </label>
+                        <div id="file-name-display"
+                            class="text-center text-xs font-mono text-luart-500 mt-2 h-4 truncate px-2"></div>
+                    </div>
+
+                    <div id="quote-error"
+                        class="hidden text-red-400 text-xs font-medium text-center bg-red-500/10 border border-red-500/20 rounded py-2">
+                    </div>
+
+                    <button type="submit"
+                        class="w-full bg-white text-black hover:bg-luart-100 font-display font-semibold py-4 px-4 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 mt-4 shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.2)]">
+                        <span id="qt-btn-text">Iniciar Solicitud</span>
+                        <i class="fas fa-paper-plane text-xs"></i>
+                    </button>
+                </form>
             </div>
         </div>
+
+        <!-- Right Column: Operations History -->
+        <div class="lg:col-span-7 pl-0 lg:pl-10 mt-10 lg:mt-0">
+            <div class="flex items-end justify-between mb-8 cursor-default">
+                <div>
+                    <h2 class="text-3xl font-display font-bold text-white tracking-tight leading-none mb-1">Traceability
+                        Hub</h2>
+                    <p class="text-gray-400 text-sm">Historial completo de tus proyectos en manufactura.</p>
+                </div>
+                <div
+                    class="hidden sm:flex items-center gap-2 text-xs text-luart-500 bg-luart-500/10 px-3 py-1.5 rounded-full font-medium border border-luart-500/20">
+                    <i class="fas fa-lock"></i> Canal Privado
+                </div>
+            </div>
+
+            <div id="my-quotes-list" class="space-y-4">
+                <!-- Skeleton Loader -->
+                <div
+                    class="glass-card rounded-2xl p-6 flex flex-col items-center justify-center text-gray-500 h-64 border-dashed border-white/5">
+                    <i class="fas fa-sync fa-spin text-2xl mb-4 text-gray-600"></i>
+                    <p class="text-sm font-medium">Sincronizando operaciones de manufactura...</p>
+                </div>
+            </div>
+        </div>
+
     </main>
 
-    <script>
-        document.addEventListener('mousemove', (e) => {
-            const cursorGlow = document.querySelector('.cursor-glow');
-            if (cursorGlow) {
-                cursorGlow.style.left = e.clientX + 'px';
-                cursorGlow.style.top = e.clientY + 'px';
-            }
-        });
-    </script>
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabaseClient.js?v=10"></script>
+    <script src="dashboard.js?v=10"></script>
 </body>
 
 </html>
