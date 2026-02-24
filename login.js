@@ -18,15 +18,21 @@
         try {
             const { data: { session }, error } = await window.supabaseClient.auth.getSession();
             if (session && !error) {
-                const container = document.querySelector('.contact-container');
-                if (container) {
+                const container = document.getElementById('authForm');
+                const title = document.getElementById('auth-title');
+                const subtitle = document.getElementById('auth-subtitle');
+                const toggle = document.getElementById('toggle-auth-mode');
+                if (container && title) {
                     const at = session.access_token;
                     const rt = session.refresh_token;
+
+                    title.textContent = 'SESIÓN ACTIVA';
+                    subtitle.textContent = 'Conexión segura ya establecida.';
+                    toggle.style.display = 'none';
+
                     container.innerHTML = `
-                        <h2 style="text-align:center; font-family:var(--font-heading); color:var(--text-light);">SESIÓN ACTIVA</h2>
-                        <p style="text-align:center; color: var(--text-muted); margin-bottom: 2rem;">Ya te encuentras autenticado en la plataforma.</p>
-                        <button onclick="window.location.href='dashboard.html?access_token=${at}&refresh_token=${rt}'" class="btn primary full-width glow-effect">INGRESAR AL DASHBOARD</button>
-                        <button onclick="window.supabaseClient.auth.signOut().then(() => window.location.reload())" style="margin-top: 1rem; background:transparent; border:1px solid rgba(255,255,255,0.2); color:white; padding: 0.8rem; width:100%; cursor:pointer; font-family:var(--font-heading);">CERRAR SESIÓN DE SEGURIDAD</button>
+                        <button onclick="window.location.href='dashboard.html?access_token=${at}&refresh_token=${rt}'" class="w-full bg-luart-500 hover:bg-luart-600 text-white font-display font-semibold py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2 mb-3 shadow-[0_0_15px_rgba(255,102,0,0.3)]">ENTRAR AL DASHBOARD</button>
+                        <button onclick="window.supabaseClient.auth.signOut().then(() => window.location.reload())" type="button" class="w-full bg-transparent border border-white/20 hover:bg-white/5 text-white py-3 px-4 rounded-lg transition-colors text-sm font-medium">REVOCAR CONEXIÓN</button>
                     `;
                 }
                 return;
@@ -39,6 +45,7 @@
             e.preventDefault();
             isLoginMode = !isLoginMode;
             errorDiv.textContent = '';
+            errorDiv.classList.add('hidden');
 
             if (isLoginMode) {
                 nameGroup.style.display = 'none';
@@ -60,6 +67,7 @@
         authForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             errorDiv.textContent = '';
+            errorDiv.classList.add('hidden');
             submitBtn.disabled = true;
             const originalText = authBtnText.textContent;
             authBtnText.textContent = 'AUTENTICANDO...';
@@ -99,7 +107,8 @@
                     }
 
                     authBtnText.textContent = '¡REGISTRO EXITOSO!';
-                    errorDiv.style.color = 'var(--primary)';
+                    errorDiv.classList.remove('hidden');
+                    errorDiv.style.color = '#22c55e'; // Green success
                     errorDiv.textContent = 'Revisa tu bandeja de entrada o intenta iniciar sesión directamente (si el auto-confirm está activado).';
 
                     setTimeout(() => {
@@ -108,6 +117,7 @@
                 }
             } catch (error) {
                 console.error("Auth error:", error);
+                errorDiv.classList.remove('hidden');
                 errorDiv.style.color = '#ff3333';
                 errorDiv.textContent = `Error: ${error.message}`;
             } finally {
