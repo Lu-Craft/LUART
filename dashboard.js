@@ -17,8 +17,18 @@
         // ==== AUTH CHECK ====
         try {
             const { data: { session }, error } = await window.supabaseClient.auth.getSession();
-            if (error || !session) {
-                window.location.href = 'login.html';
+
+            // Si no hay sesión, al login directo.
+            if (!session || error) {
+                console.error("Dashboard Auth Error:", error);
+
+                // Clear dirty session to prevent loop
+                if (error) {
+                    await window.supabaseClient.auth.signOut();
+                }
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 500);
                 return;
             }
             currentUser = session.user;

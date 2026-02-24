@@ -9,8 +9,13 @@
         try {
             // Check Auth
             const { data: { session }, error } = await window.supabaseClient.auth.getSession();
-            if (error || !session) {
-                window.location.href = 'login.html'; // Redirige a login temporalmente
+            if (!session || error) {
+                if (error) {
+                    await window.supabaseClient.auth.signOut();
+                }
+                setTimeout(() => {
+                    window.location.href = 'login.html'; // Redirige a login
+                }, 500);
                 return;
             }
 

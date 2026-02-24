@@ -16,8 +16,8 @@
 
         // Comprobar si ya estamos logueados
         try {
-            const { data: { session } } = await window.supabaseClient.auth.getSession();
-            if (session) {
+            const { data: { session }, error } = await window.supabaseClient.auth.getSession();
+            if (session && !error) {
                 window.location.href = 'dashboard.html';
             }
         } catch (e) {
