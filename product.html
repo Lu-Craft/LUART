@@ -198,12 +198,13 @@
                     <div class="flex items-center justify-between">
                         <span class="text-xs font-medium text-gray-400 uppercase tracking-widest">Proceso
                             Habilitado</span>
-                        <div
+                        <div id="avail-container"
                             class="flex items-center gap-2 px-3 py-1 bg-luart-500/10 rounded-full border border-luart-500/20">
-                            <span
+                            <span id="avail-ping"
                                 class="flex h-2 w-2 rounded-full bg-luart-500 opacity-75 animate-ping absolute"></span>
-                            <span class="relative flex h-2 w-2 rounded-full bg-luart-500"></span>
-                            <span class="text-[10px] font-bold text-luart-500 tracking-widest uppercase">Fabricación
+                            <span id="avail-dot" class="relative flex h-2 w-2 rounded-full bg-luart-500"></span>
+                            <span id="avail-text"
+                                class="text-[10px] font-bold text-luart-500 tracking-widest uppercase">Fabricación
                                 Bajo Demanda</span>
                         </div>
                     </div>
@@ -257,10 +258,11 @@
                         <span id="prod-price" class="pl-2">--.--</span>
                     </div>
 
-                    <a href="index.html#contact"
+                    <a href="index.html#contact" id="action-btn"
                         class="w-full sm:w-auto flex-1 bg-luart-500 hover:bg-luart-600 text-white font-display font-semibold py-4 px-8 rounded-xl transition-all duration-300 flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(255,102,0,0.3)] hover:shadow-[0_0_30px_rgba(255,102,0,0.5)] group">
-                        <span>SOLICITAR FABRICACIÓN</span>
-                        <i class="fas fa-hammer text-sm group-hover:-rotate-12 transition-transform"></i>
+                        <span id="action-btn-text">SOLICITAR FABRICACIÓN</span>
+                        <i id="action-btn-icon"
+                            class="fas fa-hammer text-sm group-hover:-rotate-12 transition-transform"></i>
                     </a>
                 </div>
 
@@ -272,6 +274,8 @@
     </main>
 
     <script src="gallery-data.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabaseClient.js?v=9"></script>
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
@@ -300,6 +304,50 @@
             }
             document.getElementById('prod-desc').innerText = product.description;
             document.getElementById('prod-price').innerText = product.price;
+
+            // State Application Function
+            const applyAvailability = (isAvail) => {
+                const badge = document.getElementById('avail-container');
+                const ping = document.getElementById('avail-ping');
+                const dot = document.getElementById('avail-dot');
+                const text = document.getElementById('avail-text');
+                const btn = document.getElementById('action-btn');
+                const btnText = document.getElementById('action-btn-text');
+                const btnIcon = document.getElementById('action-btn-icon');
+
+                if (isAvail) {
+                    badge.className = "flex items-center gap-2 px-3 py-1 bg-luart-500/10 rounded-full border border-luart-500/20";
+                    ping.className = "flex h-2 w-2 rounded-full bg-luart-500 opacity-75 animate-ping absolute";
+                    dot.className = "relative flex h-2 w-2 rounded-full bg-luart-500";
+                    text.className = "text-[10px] font-bold text-luart-500 tracking-widest uppercase";
+                    text.innerText = "Fabricación Bajo Demanda";
+
+                    btn.className = "w-full sm:w-auto flex-1 bg-luart-500 hover:bg-luart-600 text-white font-display font-semibold py-4 px-8 rounded-xl transition-all duration-300 flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(255,102,0,0.3)] hover:shadow-[0_0_30px_rgba(255,102,0,0.5)] group";
+                    btn.href = "index.html#contact";
+                    btnText.innerText = "SOLICITAR FABRICACIÓN";
+                    btnIcon.className = "fas fa-hammer text-sm group-hover:-rotate-12 transition-transform";
+                } else {
+                    badge.className = "flex items-center gap-2 px-3 py-1 bg-red-500/10 rounded-full border border-red-500/20";
+                    ping.className = "hidden";
+                    dot.className = "relative flex h-2 w-2 rounded-full bg-red-500";
+                    text.className = "text-[10px] font-bold text-red-500 tracking-widest uppercase";
+                    text.innerText = "Producción Suspendida";
+
+                    btn.className = "w-full sm:w-auto flex-1 bg-gray-800 text-gray-500 font-display font-semibold py-4 px-8 rounded-xl flex items-center justify-center gap-3 cursor-not-allowed border border-gray-700";
+                    btn.removeAttribute('href');
+                    btnText.innerText = "NO DISPONIBLE";
+                    btnIcon.className = "fas fa-ban text-sm";
+                }
+            };
+
+            applyAvailability(product.is_available !== false);
+
+            if (window.supabaseClient) {
+                window.supabaseClient.from('product_status').select('is_available').eq('id', productId).single()
+                    .then(({ data, error }) => {
+                        if (data) applyAvailability(data.is_available);
+                    });
+            }
 
             // --- SWIPER INITIALIZATION ---
             const swiperWrapper = document.getElementById('swiper-wrapper');

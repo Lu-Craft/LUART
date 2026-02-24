@@ -190,15 +190,20 @@
                 if (item.category === 'others' && item.author) {
                     const badge = document.createElement('span');
                     badge.className = 'author-badge';
-
                     const icon = document.createElement('i');
                     icon.className = 'fas fa-user-circle';
-
-                    // Helper text node to avoid innerHTML even for icon+text pattern
                     badge.appendChild(icon);
                     badge.appendChild(document.createTextNode(` ${item.author}`));
-
                     overlay.appendChild(badge);
+                }
+
+                // Suspend Badge if unavailable
+                if (item.is_available === false) {
+                    imgContainer.style.filter = "grayscale(100%) opacity(0.5)";
+                    const suspendBadge = document.createElement('span');
+                    suspendBadge.style.cssText = "position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); background:rgba(255,0,0,0.8); color:white; padding:4px 12px; font-weight:bold; font-size:12px; letter-spacing:2px; z-index:10; border-radius:4px;";
+                    suspendBadge.textContent = "SUSPENDIDO";
+                    imgContainer.appendChild(suspendBadge);
                 }
 
                 // Assemble Card
@@ -245,8 +250,23 @@
             });
         });
 
-        // Initial Render
-        renderGallery(galleryData);
+        // Initialize logic asynchronously
+        const loadGalleryStatus = async () => {
+            if (window.supabaseClient) {
+                try {
+                    const { data } = await window.supabaseClient.from('product_status').select('*');
+                    if (data) {
+                        data.forEach(dbStat => {
+                            const p = galleryData.find(g => g.id === dbStat.id);
+                            if (p) p.is_available = dbStat.is_available;
+                        });
+                    }
+                } catch (e) { }
+            }
+            applyFilters();
+        };
+
+        loadGalleryStatus();
     };
 
     // --- THREE.JS SCENE ---

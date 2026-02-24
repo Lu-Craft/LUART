@@ -8,6 +8,7 @@ const galleryData = [
         subcategory: "artistic",
         description: "Olvídate de figuras de plástico malo. Hemos recreado este cuartel con un detalle que es una locura. Cada ladrillo y estandarte están ahí para que tus amigos alucinen. Listo para pintar o lucir tal cual.",
         price: "Consultar",
+        is_available: true,
         author: "Luart",
         images: [
             "media/products/paladines/principal.jpg",
@@ -25,6 +26,7 @@ const galleryData = [
         subcategory: "artistic",
         description: "Si te va el rollo mágico, esta torre es obligatoria. Estructura compleja pero optimizada para que quede perfecta. Ideal para tus partidas de rol o para darle nivel a tu estantería.",
         price: "Consultar",
+        is_available: true,
         author: "Luart",
         images: [
             "media/products/torre-mago/principal.jpg",
@@ -44,6 +46,7 @@ const galleryData = [
         subcategory: "artistic",
         description: "Esto no es un juguete cualquiera. Sistema láser tag funcional con un diseño que parece sacado de una peli de ciencia ficción. Diversión garantizada y acabado top.",
         price: "No a la venta",
+        is_available: false,
         author: "Luart",
         images: [
             "media/products/laser-game/principal.JPG",
@@ -64,6 +67,7 @@ const galleryData = [
         subcategory: "technical",
         description: "¿Harto de que se rompa el guardabarros de serie? Aquí tienes la solución definitiva. Reforzado, duro como una roca y adiós a las vibraciones. Móntalo y olvídate.",
         price: "15.00 €",
+        is_available: true,
         author: "Luart",
         images: [
             "media/products/guardabarros/principal.jpg",
@@ -83,6 +87,7 @@ const galleryData = [
         subcategory: "technical",
         description: "Deja de pelearte con boquillas que no tiran bien. Diseño optimizado para un flujo suave como la seda. Resultados profesionales sin dolores de cabeza.",
         price: "Consultar",
+        is_available: true,
         author: "Luart",
         images: [
             "media/products/boquillas/principal.png",
@@ -102,6 +107,7 @@ const galleryData = [
         subcategory: "artistic",
         description: "El rey de las poses. Esta figura articulada aguanta lo que le eches. Perfecto para dibujar, jugar o tenerlo haciendo el pino en tu escritorio. Un clásico mejorado.",
         price: "Desde 10.00 €",
+        is_available: true,
         author: "Soozafone",
         images: [
             "media/products/dummy13/Imagen de WhatsApp 2025-07-23 a las 08.02.53_47d5a71c.jpg",

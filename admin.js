@@ -22,6 +22,7 @@
         const tQuotes = document.querySelector('#table-print-quotes tbody');
         const tPurchases = document.querySelector('#table-product-purchases tbody');
         const tFinance = document.querySelector('#table-payments-log tbody');
+        const tCatalog = document.querySelector('#table-catalog tbody');
 
         // ==== AUTH & SECURITY CHECK ====
         try {
@@ -170,12 +171,63 @@
                 document.getElementById('stat-revenue').textContent = `€ ${revenueSum.toFixed(2)}`;
             };
 
+            // 5. Fetch Catalog items and sync with Supabase statuses
+            const fetchCatalog = async () => {
+                const { data: statusData, error } = await window.supabaseClient.from('product_status').select('*');
+                if (error) console.warn("No product_status table setup yet. Loading locally.", error);
+                const dbStatuses = statusData || [];
+
+                tCatalog.innerHTML = '';
+
+                galleryData.forEach(item => {
+                    const dbOverride = dbStatuses.find(s => s.id === item.id);
+                    const isAvailable = dbOverride ? dbOverride.is_available : (item.is_available !== false);
+
+                    const tr = document.createElement('tr');
+
+                    const statusPill = isAvailable
+                        ? `<span id="status-pill-${item.id}" class="px-2 py-1 bg-green-500/10 text-green-500 border border-green-500/20 rounded text-[10px] tracking-wide uppercase"><i class="fas fa-check-circle"></i> Activo</span>`
+                        : `<span id="status-pill-${item.id}" class="px-2 py-1 bg-red-500/10 text-red-500 border border-red-500/20 rounded text-[10px] tracking-wide uppercase"><i class="fas fa-ban"></i> Pausado</span>`;
+
+                    const toggleColor = isAvailable ? 'bg-green-500' : 'bg-gray-700';
+                    const togglePos = isAvailable ? 'right-1' : 'left-1';
+
+                    tr.innerHTML = `
+                        <td class="px-6 py-4 whitespace-nowrap"><span class="font-mono text-gray-400 text-xs">${item.id}</span></td>
+                        <td class="px-6 py-4 font-medium text-white">${item.title}</td>
+                        <td class="px-6 py-4 text-xs text-gray-400 uppercase tracking-widest">${item.category} / ${item.subcategory}</td>
+                        <td class="px-6 py-4" id="status-cell-${item.id}">${statusPill}</td>
+                        <td class="px-6 py-4 text-right">
+                            <button onclick="toggleProductStatus('${item.id}', ${!isAvailable})" class="relative inline-flex items-center h-6 rounded-full w-11 transition-colors focus:outline-none ${isAvailable ? 'bg-green-500/20' : 'bg-white/10'} hover:bg-white/20">
+                                <span class="${toggleColor} inline-block w-4 h-4 transform ${isAvailable ? 'translate-x-6' : 'translate-x-1'} rounded-full transition-transform"></span>
+                            </button>
+                        </td>
+                    `;
+                    tCatalog.appendChild(tr);
+                });
+            };
+
+            // Global toggle function
+            window.toggleProductStatus = async (productId, newState) => {
+                try {
+                    const { error } = await window.supabaseClient.from('product_status').upsert({ id: productId, is_available: newState });
+                    if (error) {
+                        alert("Error al actualizar estado. Es posible que la tabla 'product_status' no exista en la Base de Datos. Ejecuta el SQL de configuración.");
+                        console.error(error);
+                        return;
+                    }
+                    // Refresh view
+                    await fetchCatalog();
+                } catch (e) { console.error(e); }
+            };
+
             // INIT
             await Promise.all([
                 fetchContacts(),
                 fetchQuotes(),
                 fetchPurchases(),
-                fetchFinances()
+                fetchFinances(),
+                fetchCatalog()
             ]);
 
         } catch (e) {
