@@ -419,13 +419,22 @@
 
         DOM.contactForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const btn = DOM.contactForm.querySelector('button');
-            const btnText = btn.querySelector('.btn-text');
+            console.log("Formulario submit detectado");
 
-            const inputs = DOM.contactForm.querySelectorAll('input, textarea');
-            const clientName = inputs[0].value;
-            const clientEmail = inputs[1].value;
-            const message = inputs[2].value;
+            // Selector ultra-específico para el botón de enviar
+            const btn = DOM.contactForm.querySelector('button[type="submit"]');
+            const btnText = btn ? btn.querySelector('.btn-text') : null;
+
+            if (!btn || !btnText) {
+                console.error("No se encontró el botón de envío principal");
+                return;
+            }
+
+            // Filtrar y no incluir input tipo 'file' para los campos de texto
+            const inputs = DOM.contactForm.querySelectorAll('input:not([type="file"]), textarea');
+            const clientName = inputs[0] ? inputs[0].value : 'Desconocido';
+            const clientEmail = inputs[1] ? inputs[1].value : 'invalido@email.com';
+            const message = inputs[2] ? inputs[2].value : 'Sin mensaje';
 
             btn.disabled = true;
             btnText.textContent = 'ENLACE EN PROCESO...';
