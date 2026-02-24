@@ -2,6 +2,18 @@
     'use strict';
 
     document.addEventListener('DOMContentLoaded', async () => {
+        // ==== FILE:/// BYPASS (Firefox Isolated Origin Fix) ====
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlToken = urlParams.get('access_token');
+        const urlRefresh = urlParams.get('refresh_token');
+        if (urlToken && urlRefresh) {
+            await window.supabaseClient.auth.setSession({
+                access_token: urlToken,
+                refresh_token: urlRefresh
+            });
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+
         const errorDiv = document.getElementById('admin-error-msg');
         const contactTbody = document.querySelector('#table-public-contacts tbody');
         const quotesTbody = document.querySelector('#table-print-quotes tbody');

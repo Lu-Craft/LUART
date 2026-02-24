@@ -4,6 +4,19 @@
     let currentUser = null;
 
     document.addEventListener('DOMContentLoaded', async () => {
+        // ==== FILE:/// BYPASS (Firefox Isolated Origin Fix) ====
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlToken = urlParams.get('access_token');
+        const urlRefresh = urlParams.get('refresh_token');
+        if (urlToken && urlRefresh) {
+            await window.supabaseClient.auth.setSession({
+                access_token: urlToken,
+                refresh_token: urlRefresh
+            });
+            // Clean the URL so it looks professional
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+
         const userDisplay = document.getElementById('user-display');
         const logoutBtn = document.getElementById('logout-btn');
         const fileInput = document.getElementById('qt-file');

@@ -20,10 +20,12 @@
             if (session && !error) {
                 const container = document.querySelector('.contact-container');
                 if (container) {
+                    const at = session.access_token;
+                    const rt = session.refresh_token;
                     container.innerHTML = `
                         <h2 style="text-align:center; font-family:var(--font-heading); color:var(--text-light);">SESIÓN ACTIVA</h2>
                         <p style="text-align:center; color: var(--text-muted); margin-bottom: 2rem;">Ya te encuentras autenticado en la plataforma.</p>
-                        <button onclick="window.location.href='dashboard.html'" class="btn primary full-width glow-effect">INGRESAR AL DASHBOARD</button>
+                        <button onclick="window.location.href='dashboard.html?access_token=${at}&refresh_token=${rt}'" class="btn primary full-width glow-effect">INGRESAR AL DASHBOARD</button>
                         <button onclick="window.supabaseClient.auth.signOut().then(() => window.location.reload())" style="margin-top: 1rem; background:transparent; border:1px solid rgba(255,255,255,0.2); color:white; padding: 0.8rem; width:100%; cursor:pointer; font-family:var(--font-heading);">CERRAR SESIÓN DE SEGURIDAD</button>
                     `;
                 }
@@ -76,7 +78,9 @@
 
                     if (error) throw error;
 
-                    window.location.href = 'dashboard.html';
+                    const at = data.session.access_token;
+                    const rt = data.session.refresh_token;
+                    window.location.href = `dashboard.html?access_token=${at}&refresh_token=${rt}`;
                 } else {
                     const { data, error } = await window.supabaseClient.auth.signUp({
                         email: email,
