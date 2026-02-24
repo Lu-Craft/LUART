@@ -29,7 +29,13 @@
                 document.body.innerHTML = `
                     <div style="min-height: 100vh; display: flex; flex-direction:column; align-items: center; justify-content: center; padding: 2rem; color: white; background: var(--bg-dark); text-align:center;">
                         <h2 style="font-family: var(--font-heading); color: #ff3333; margin-bottom: 1rem;">SESIÓN INVÁLIDA O INEXISTENTE</h2>
-                        <p style="margin-bottom: 2rem; color: var(--text-muted);">Por favor, regresa al portal de acceso para verificar tu identidad.</p>
+                        <p style="margin-bottom: 2rem; color: var(--text-muted);">
+                           <strong>Diagnostic Info:</strong><br>
+                           Session object: ${session ? 'Exists' : 'Null'}<br>
+                           Error object: ${error ? JSON.stringify(error) : 'None'}<br>
+                           LocalStorage (sb-token): ${localStorage.getItem('sb-kvtietlcmyubphenthfo-auth-token') ? 'Found' : 'Missing'}<br>
+                           Origin: ${window.location.origin}<br>
+                        </p>
                         <a href="login.html" class="btn primary glow-effect" style="text-decoration:none; display:inline-block;">VOLVER AL PORTAL</a>
                     </div>
                 `;
