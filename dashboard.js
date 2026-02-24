@@ -81,8 +81,8 @@
                 const adminLi = document.createElement('li');
                 const { data } = await window.supabaseClient.auth.getSession();
                 const at = data?.session?.access_token || '';
-                const rt = data?.session?.refresh_token || '';
-                adminLi.innerHTML = `<a href="admin.html?access_token=${at}&refresh_token=${rt}" style="color:#ff6600; font-family:var(--font-heading);"><i class="fas fa-crown"></i> PANEL DE ADMINISTRADOR</a>`;
+                adminLi.classList.add("hidden", "md:block");
+                adminLi.innerHTML = `<a href="admin.html?access_token=${at}&refresh_token=${rt}" class="flex items-center gap-2 text-sm font-bold text-luart-500 hover:text-white transition-colors group"><i class="fas fa-crown group-hover:-rotate-12 transition-transform"></i> PANEL CEO</a>`;
                 navLinks.insertBefore(adminLi, navLinks.firstChild);
             }
 
