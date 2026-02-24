@@ -390,7 +390,7 @@ body {
     backdrop-filter: blur(20px);
     border-radius: 20px;
     /* User Requested Enhancement: Glow Animation */
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); 
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
     animation: contactGlow 4s infinite alternate;
 }
 
@@ -399,6 +399,7 @@ body {
         box-shadow: 0 5px 20px rgba(0, 0, 0, 0.8), 0 0 0 transparent;
         border-color: var(--glass-border);
     }
+
     to {
         box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9), 0 0 20px rgba(255, 102, 0, 0.2);
         border-color: var(--primary);
@@ -2065,7 +2066,8 @@ footer {
 }
 
 .file-input {
-    display: none; /* Hide the default ugly input */
+    display: none;
+    /* Hide the default ugly input */
 }
 
 .file-label {
@@ -2079,13 +2081,13 @@ footer {
     font-family: var(--font-heading);
     cursor: pointer;
     transition: all 0.3s ease;
-    background: rgba(255,102,0,0.02);
+    background: rgba(255, 102, 0, 0.02);
 }
 
 .file-label:hover {
     border-color: var(--primary);
     color: var(--primary);
-    background: rgba(255,102,0,0.05);
+    background: rgba(255, 102, 0, 0.05);
 }
 
 .file-label i {
@@ -2130,4 +2132,21 @@ footer {
     font-size: 12px;
     cursor: pointer;
     border: none;
+}
+
+/* Authentication & Dashboard Portal Styles */
+.portal-link {
+    color: var(--primary) !important;
+    font-weight: 700;
+    text-shadow: 0 0 10px rgba(255, 102, 0, 0.4);
+    border: 1px solid rgba(255, 102, 0, 0.3) !important;
+    padding: 0.5rem 1rem !important;
+    border-radius: 4px;
+    background: rgba(255, 102, 0, 0.05);
+}
+
+.portal-link:hover {
+    background: rgba(255, 102, 0, 0.15);
+    text-shadow: 0 0 20px rgba(255, 102, 0, 0.8);
+    transform: translateY(-2px);
 }

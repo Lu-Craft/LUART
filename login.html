@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data:; connect-src 'self' https://kvtietlcmyubphenthfo.supabase.co wss://kvtietlcmyubphenthfo.supabase.co;">
+    <title>LUART | Portal Acceso</title>
+
+    <!-- Supabase UMD Global Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabaseClient.js?v=4" defer></script>
+    <script src="login.js?v=4" defer></script>
+    <link rel="stylesheet" href="style.css?v=4">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body class="dark-mode">
+    <div class="noise-overlay"></div>
+    <div class="cursor-glow"></div>
+    <div class="nebula-spot spot-1"></div>
+
+    <nav class="glass-nav">
+        <div class="logo"><a href="index.html" style="color:var(--text-light);text-decoration:none;">LUART<span
+                    class="dot">.</span></a></div>
+    </nav>
+
+    <main style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem;">
+        <div class="contact-container glass-panel" style="max-width: 450px; width: 100%;">
+            <h2 id="auth-title">ENLACE SEGURO</h2>
+            <p id="auth-subtitle" class="void-subtitle" style="text-align: center; margin-bottom: 2rem;">Acceso al túnel
+                privado del cliente.</p>
+
+            <form id="authForm">
+                <div class="input-group" id="name-group" style="display: none;">
+                    <input type="text" id="auth-name">
+                    <label>NOMBRE COMPLETO</label>
+                </div>
+                <div class="input-group">
+                    <input type="email" id="auth-email" required>
+                    <label>CORREO ELECTRÓNICO</label>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="auth-password" required minlength="6">
+                    <label>CONTRASEÑA (MÍN 6)</label>
+                </div>
+
+                <div id="auth-error"
+                    style="color: #ff3333; margin-bottom: 1rem; font-size: 0.9rem; text-align: center;"></div>
+
+                <button type="submit" class="btn primary full-width glow-effect">
+                    <span class="btn-text" id="auth-btn-text">INICIAR CONEXIÓN</span>
+                </button>
+            </form>
+
+            <div style="text-align: center; margin-top: 1.5rem;">
+                <a href="#" id="toggle-auth-mode"
+                    style="color: var(--primary); text-decoration: none; font-size: 0.9rem; transition: color 0.3s; font-family:var(--font-heading);">SOLICITAR
+                    NUEVO ACCESO (REGISTRO)</a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Fake cursor glow behavior for login
+        document.addEventListener('mousemove', (e) => {
+            const cursorGlow = document.querySelector('.cursor-glow');
+            if (cursorGlow) {
+                cursorGlow.style.left = e.clientX + 'px';
+                cursorGlow.style.top = e.clientY + 'px';
+            }
+        });
+    </script>
+</body>
+
+</html>

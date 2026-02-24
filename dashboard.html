@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data:; connect-src 'self' https://kvtietlcmyubphenthfo.supabase.co wss://kvtietlcmyubphenthfo.supabase.co;">
+    <title>LUART | Dashboard Cliente</title>
+
+    <!-- Supabase UMD Global Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabaseClient.js?v=4" defer></script>
+    <script src="dashboard.js?v=4" defer></script>
+    <link rel="stylesheet" href="style.css?v=4">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 8rem 2rem 2rem 2rem;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .quote-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .quote-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(255, 102, 0, 0.1);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.2rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-family: var(--font-heading);
+            font-weight: 700;
+            background: rgba(255, 102, 0, 0.2);
+            color: var(--primary);
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+
+<body class="dark-mode">
+    <div class="noise-overlay"></div>
+    <div class="cursor-glow"></div>
+
+    <nav class="glass-nav">
+        <div class="logo"><a href="index.html" style="color:var(--text-light);text-decoration:none;">LUART<span
+                    class="dot">.</span></a></div>
+        <ul class="nav-links">
+            <li><a href="#" id="user-display"><i class="fas fa-user"></i> CARGANDO...</a></li>
+            <li><a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> DESCONECTAR</a></li>
+        </ul>
+    </nav>
+
+    <main class="dashboard-container">
+        <!-- Columna Izquierda: Formulario Nueva Cotización -->
+        <div class="glass-panel">
+            <h3 style="font-family: var(--font-heading); margin-bottom: 1.5rem;">NUEVA SOLICITUD 3D</h3>
+            <form id="new-quote-form">
+                <div class="input-group">
+                    <input type="text" id="qt-title" required>
+                    <label>TÍTULO DEL PROYECTO</label>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="qt-material" placeholder="FDM, Resina, Flexible..." required>
+                    <label>MATERIAL PREFERIDO</label>
+                </div>
+                <div class="input-group">
+                    <textarea id="qt-desc" required></textarea>
+                    <label>DESCRIPCIÓN TÉCNICA</label>
+                </div>
+
+                <div class="file-upload-group" style="margin-bottom:1.5rem;">
+                    <label for="qt-file" class="file-label" style="text-align:center; padding: 2rem;">
+                        <i class="fas fa-cube" style="font-size:2rem; margin-bottom:1rem; display:block;"></i>
+                        CARGAR MODELO 3D (.STL, .OBJ)
+                    </label>
+                    <input type="file" id="qt-file" accept=".stl,.obj" class="file-input" required>
+                    <div id="file-name-display"
+                        style="text-align:center; color: var(--primary); font-size: 0.9rem; margin-top:0.5rem;"></div>
+                </div>
+
+                <div id="quote-error"
+                    style="color: #ff3333; margin-bottom: 1rem; font-size: 0.9rem; text-align: center;"></div>
+
+                <button type="submit" class="btn primary full-width glow-effect">
+                    <span class="btn-text" id="qt-btn-text">INICIAR MANUFACTURA</span>
+                </button>
+            </form>
+        </div>
+
+        <!-- Columna Derecha: Listado de Cotizaciones -->
+        <div class="glass-panel">
+            <h3 style="font-family: var(--font-heading); margin-bottom: 1.5rem;">REGISTRO DE OPERACIONES</h3>
+            <div id="my-quotes-list">
+                <p style="color: var(--text-muted); text-align:center; padding: 2rem;">Cargando historial de modelos...
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('mousemove', (e) => {
+            const cursorGlow = document.querySelector('.cursor-glow');
+            if (cursorGlow) {
+                cursorGlow.style.left = e.clientX + 'px';
+                cursorGlow.style.top = e.clientY + 'px';
+            }
+        });
+    </script>
+</body>
+
+</html>
