@@ -369,6 +369,54 @@
     const initForms = () => {
         if (!DOM.contactForm) return;
 
+        const fileInput = document.getElementById('reference-images');
+        const previewList = document.getElementById('file-preview-list');
+        let selectedFiles = [];
+
+        if (fileInput && previewList) {
+            fileInput.addEventListener('change', (e) => {
+                const newFiles = Array.from(e.target.files);
+
+                if (selectedFiles.length + newFiles.length > 5) {
+                    alert('Has alcanzado el límite máximo de 5 imágenes.');
+                    fileInput.value = '';
+                    return;
+                }
+
+                newFiles.forEach(file => {
+                    if (!file.type.startsWith('image/')) return;
+                    selectedFiles.push(file);
+
+                    const reader = new FileReader();
+                    reader.onload = (re) => {
+                        const item = document.createElement('div');
+                        item.className = 'file-preview-item';
+
+                        const img = document.createElement('img');
+                        img.src = re.target.result;
+
+                        const removeBtn = document.createElement('button');
+                        removeBtn.className = 'file-preview-remove';
+                        removeBtn.innerHTML = '&times;';
+                        removeBtn.type = 'button';
+                        removeBtn.onclick = (event) => {
+                            event.preventDefault();
+                            const index = selectedFiles.indexOf(file);
+                            if (index > -1) selectedFiles.splice(index, 1);
+                            item.remove();
+                        };
+
+                        item.appendChild(img);
+                        item.appendChild(removeBtn);
+                        previewList.appendChild(item);
+                    };
+                    reader.readAsDataURL(file);
+                });
+
+                fileInput.value = ''; // Reset to allow adding same file again if removed
+            });
+        }
+
         DOM.contactForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = DOM.contactForm.querySelector('button');
@@ -385,10 +433,40 @@
             btn.style.cursor = 'wait';
 
             try {
+                let imageUrls = [];
+
+                if (selectedFiles.length > 0) {
+                    btnText.textContent = 'SUBIENDO ARCHIVOS...';
+                    for (const file of selectedFiles) {
+                        const fileExt = file.name.split('.').pop();
+                        const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+
+                        const { error: uploadError } = await window.supabaseClient.storage
+                            .from('contact_references')
+                            .upload(fileName, file);
+
+                        if (!uploadError) {
+                            const { data } = window.supabaseClient.storage
+                                .from('contact_references')
+                                .getPublicUrl(fileName);
+                            imageUrls.push(data.publicUrl);
+                        } else {
+                            console.error("Error subiendo imagen:", uploadError);
+                        }
+                    }
+                }
+
+                btnText.textContent = 'ENVIANDO MENSAJE...';
+
                 // Using the global client from supabaseClient.js
                 const { error } = await window.supabaseClient
                     .from('public_contacts')
-                    .insert([{ client_name: clientName, client_email: clientEmail, message }]);
+                    .insert([{
+                        client_name: clientName,
+                        client_email: clientEmail,
+                        message: message,
+                        reference_images: imageUrls
+                    }]);
 
                 if (error) throw error;
 

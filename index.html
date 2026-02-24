@@ -136,8 +136,18 @@
                     <textarea required></textarea>
                     <label>CUÉNTAME TU IDEA</label>
                 </div>
+
+                <!-- Image Upload Group -->
+                <div class="file-upload-group">
+                    <label for="reference-images" class="file-label">
+                        <i class="fas fa-cloud-upload-alt"></i> ADJUNTAR REFERENCIAS (MÁX 5)
+                    </label>
+                    <input type="file" id="reference-images" accept="image/*" multiple class="file-input">
+                    <div id="file-preview-list" class="file-preview-list"></div>
+                </div>
+
                 <button type="submit" class="btn primary full-width glow-effect">
-                    <span class="btn-text">ENVIAR MENSAJE</span>
+                    <span class="btn-text">ENVIAR MENSAJE Y ARCHIVOS</span>
                 </button>
             </form>
         </div>

@@ -2058,3 +2058,76 @@ footer {
         /* Spacing between stacked cards */
     }
 }
+
+/* File Upload Group Styling */
+.file-upload-group {
+    margin-bottom: 2rem;
+}
+
+.file-input {
+    display: none; /* Hide the default ugly input */
+}
+
+.file-label {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    border: 1px dashed var(--glass-border);
+    border-radius: 8px;
+    text-align: center;
+    color: var(--text-muted);
+    font-family: var(--font-heading);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: rgba(255,102,0,0.02);
+}
+
+.file-label:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: rgba(255,102,0,0.05);
+}
+
+.file-label i {
+    margin-right: 10px;
+    font-size: 1.2rem;
+}
+
+.file-preview-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.file-preview-item {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    border-radius: 5px;
+    overflow: hidden;
+    border: 1px solid var(--glass-border);
+}
+
+.file-preview-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.file-preview-remove {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #ff0000;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    cursor: pointer;
+    border: none;
+}
