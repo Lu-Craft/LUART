@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUART | Centro de Control Admin</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabaseClient.js?v=5" defer></script>
+    <script src="admin.js?v=5" defer></script>
+    <link rel="stylesheet" href="style.css?v=5">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        .admin-dashboard {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 8rem 2rem 2rem 2rem;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .data-table th,
+        .data-table td {
+            text-align: left;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .data-table th {
+            background: rgba(255, 102, 0, 0.1);
+            color: var(--primary);
+            font-family: var(--font-heading);
+            font-size: 0.8rem;
+        }
+
+        .data-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .link-url {
+            color: #4da6ff;
+            text-decoration: none;
+        }
+
+        .link-url:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body class="dark-mode">
+    <div class="noise-overlay"></div>
+    <div class="cursor-glow"></div>
+
+    <nav class="glass-nav">
+        <div class="logo"><a href="index.html" style="color:var(--text-light);text-decoration:none;">LUART<span
+                    class="dot">.</span> ADMIN</a></div>
+        <ul class="nav-links">
+            <li><a href="#" id="admin-user-display"><i class="fas fa-shield-alt"></i> VERIFICANDO...</a></li>
+            <li><a href="#" id="admin-logout-btn"><i class="fas fa-power-off"></i> CERRAR SISTEMA</a></li>
+        </ul>
+    </nav>
+
+    <main class="admin-dashboard">
+        <!-- 1. Contact Forms (Usuarios sin registrar) -->
+        <h2
+            style="font-family: var(--font-heading); color: var(--text-light); margin-bottom: 0.5rem; margin-top: 2rem;">
+            1. BANDEJA DE CONTACTOS PÚBLICOS
+        </h2>
+        <p style="color: var(--text-muted); margin-bottom: 1rem;">Mensajes e imágenes de contacto general.</p>
+        <div class="glass-panel" style="overflow-x: auto; padding: 0;">
+            <table class="data-table" id="table-public-contacts">
+                <thead>
+                    <tr>
+                        <th>FECHA</th>
+                        <th>C. NOMBRE</th>
+                        <th>C. EMAIL</th>
+                        <th>MENSAJE</th>
+                        <th>ARCHIVOS ADJUNTOS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="5" style="text-align:center;">Cargando base de datos...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 2. Portal 3D Orders -->
+        <h2
+            style="font-family: var(--font-heading); color: var(--text-light); margin-bottom: 0.5rem; margin-top: 4rem;">
+            2. SOLICITUDES DE USUARIOS VERIFICADOS (PORTAL 3D)
+        </h2>
+        <p style="color: var(--text-muted); margin-bottom: 1rem;">Archivos STL/OBJ subidos por clientes logueados.</p>
+        <div class="glass-panel" style="overflow-x: auto; padding: 0;">
+            <table class="data-table" id="table-print-quotes">
+                <thead>
+                    <tr>
+                        <th>FECHA</th>
+                        <th>USUARIO_ID</th>
+                        <th>PROYECTO</th>
+                        <th>MATERIAL</th>
+                        <th>DESCRIPCIÓN</th>
+                        <th>URL ARCHIVO 3D</th>
+                        <th>ESTADO</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="7" style="text-align:center;">Cargando base de datos...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="admin-error-msg" style="color: #ff3333; margin-top: 2rem; font-weight: bold;"></div>
+    </main>
+
+    <script>
+        document.addEventListener('mousemove', (e) => {
+            const cursorGlow = document.querySelector('.cursor-glow');
+            if (cursorGlow) {
+                cursorGlow.style.left = e.clientX + 'px';
+                cursorGlow.style.top = e.clientY + 'px';
+            }
+        });
+    </script>
+</body>
+
+</html>
