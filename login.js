@@ -14,11 +14,20 @@
         const errorDiv = document.getElementById('auth-error');
         const submitBtn = authForm.querySelector('button');
 
-        // Comprobar si ya estamos logueados
+        // Comprobar si ya estamos logueados de forma segura (sin redirects automáticos)
         try {
             const { data: { session }, error } = await window.supabaseClient.auth.getSession();
             if (session && !error) {
-                window.location.href = 'dashboard.html';
+                const container = document.querySelector('.contact-container');
+                if (container) {
+                    container.innerHTML = `
+                        <h2 style="text-align:center; font-family:var(--font-heading); color:var(--text-light);">SESIÓN ACTIVA</h2>
+                        <p style="text-align:center; color: var(--text-muted); margin-bottom: 2rem;">Ya te encuentras autenticado en la plataforma.</p>
+                        <button onclick="window.location.href='dashboard.html'" class="btn primary full-width glow-effect">INGRESAR AL DASHBOARD</button>
+                        <button onclick="window.supabaseClient.auth.signOut().then(() => window.location.reload())" style="margin-top: 1rem; background:transparent; border:1px solid rgba(255,255,255,0.2); color:white; padding: 0.8rem; width:100%; cursor:pointer; font-family:var(--font-heading);">CERRAR SESIÓN DE SEGURIDAD</button>
+                    `;
+                }
+                return;
             }
         } catch (e) {
             console.error("Error checked session:", e);

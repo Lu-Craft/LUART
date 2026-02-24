@@ -22,13 +22,17 @@
             if (!session || error) {
                 console.error("Dashboard Auth Error:", error);
 
-                // Clear dirty session to prevent loop
                 if (error) {
                     await window.supabaseClient.auth.signOut();
                 }
-                setTimeout(() => {
-                    window.location.href = 'login.html';
-                }, 500);
+
+                document.body.innerHTML = `
+                    <div style="min-height: 100vh; display: flex; flex-direction:column; align-items: center; justify-content: center; padding: 2rem; color: white; background: var(--bg-dark); text-align:center;">
+                        <h2 style="font-family: var(--font-heading); color: #ff3333; margin-bottom: 1rem;">SESIÓN INVÁLIDA O INEXISTENTE</h2>
+                        <p style="margin-bottom: 2rem; color: var(--text-muted);">Por favor, regresa al portal de acceso para verificar tu identidad.</p>
+                        <a href="login.html" class="btn primary glow-effect" style="text-decoration:none; display:inline-block;">VOLVER AL PORTAL</a>
+                    </div>
+                `;
                 return;
             }
             currentUser = session.user;
