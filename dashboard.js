@@ -23,17 +23,27 @@
             }
             currentUser = session.user;
 
-            // Fetch Profile Name
-            const { data: profile } = await window.supabaseClient
-                .from('profiles')
-                .select('full_name')
-                .eq('id', currentUser.id)
-                .single();
+            // Fetch Profile Name (No redirigir si falla, solo mostrar email)
+            let profileName = currentUser.email;
+            try {
+                const { data: profile } = await window.supabaseClient
+                    .from('profiles')
+                    .select('full_name')
+                    .eq('id', currentUser.id)
+                    .single();
 
-            userDisplay.innerHTML = `<i class="fas fa-user-shield"></i> ${profile?.full_name || currentUser.email}`;
+                if (profile && profile.full_name) {
+                    profileName = profile.full_name;
+                }
+            } catch (profileErr) {
+                console.warn("No se pudo obtener el perfil extendido:", profileErr);
+                // No rompemos la ejecución, simplemente usamos el email como nombre
+            }
+
+            userDisplay.innerHTML = `<i class="fas fa-user-shield"></i> ${profileName}`;
 
         } catch (e) {
-            console.error(e);
+            console.error("Auth Exception:", e);
             window.location.href = 'login.html';
             return;
         }
