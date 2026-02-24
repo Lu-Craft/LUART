@@ -53,8 +53,12 @@
             userDisplay.innerHTML = `<i class="fas fa-user-shield"></i> ${profileName}`;
 
         } catch (e) {
-            console.error("Auth Exception:", e);
-            window.location.href = 'login.html';
+            console.error("CRITICAL ERROR IN DASHBOARD INIT:", e);
+            // Ya no redirigir aquí para evitar ciclos infinitos si falla el DOM o una extensión
+            const userDisplay = document.getElementById('user-display');
+            if (userDisplay) {
+                userDisplay.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ERROR DE INTERFAZ`;
+            }
             return;
         }
 
