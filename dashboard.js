@@ -58,22 +58,33 @@
 
             // Fetch Profile Name (No redirigir si falla, solo mostrar email)
             let profileName = currentUser.email;
+            let isAdmin = false;
             try {
                 const { data: profile } = await window.supabaseClient
                     .from('profiles')
-                    .select('full_name')
+                    .select('full_name, is_admin')
                     .eq('id', currentUser.id)
                     .single();
 
-                if (profile && profile.full_name) {
-                    profileName = profile.full_name;
+                if (profile) {
+                    if (profile.full_name) profileName = profile.full_name;
+                    if (profile.is_admin) isAdmin = true;
                 }
             } catch (profileErr) {
                 console.warn("No se pudo obtener el perfil extendido:", profileErr);
-                // No rompemos la ejecución, simplemente usamos el email como nombre
             }
 
             userDisplay.innerHTML = `<i class="fas fa-user-shield"></i> ${profileName}`;
+
+            if (isAdmin) {
+                const navLinks = document.querySelector('.nav-links');
+                const adminLi = document.createElement('li');
+                const { data } = await window.supabaseClient.auth.getSession();
+                const at = data?.session?.access_token || '';
+                const rt = data?.session?.refresh_token || '';
+                adminLi.innerHTML = `<a href="admin.html?access_token=${at}&refresh_token=${rt}" style="color:#ff6600; font-family:var(--font-heading);"><i class="fas fa-crown"></i> PANEL DE ADMINISTRADOR</a>`;
+                navLinks.insertBefore(adminLi, navLinks.firstChild);
+            }
 
         } catch (e) {
             console.error("CRITICAL ERROR IN DASHBOARD INIT:", e);
